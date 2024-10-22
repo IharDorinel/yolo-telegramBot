@@ -30,9 +30,9 @@ yolov5 = TerraYoloV5(work_dir=WORK_DIR)
 async def start(update, context):
 
     # создаем список Inline кнопок
-    keyboard = [[InlineKeyboardButton("Люди", callback_data="people"),
-                InlineKeyboardButton("Автомобили", callback_data="cars"),
-                InlineKeyboardButton("Корабли", callback_data="boats")
+    keyboard = [[InlineKeyboardButton("Люди", callback_data="0"),
+                InlineKeyboardButton("Автомобили", callback_data="2"),
+                InlineKeyboardButton("Корабли", callback_data="8")
                 ]]
     
     # создаем Inline клавиатуру
@@ -70,12 +70,7 @@ async def detection(update, context, selected_class):
     test_dict['source'] = 'images'          # папка, в которую загружаются присланные в бота изображения
     test_dict['conf'] = 0.5              # порог распознавания
 
-    if selected_class == 'people':
-        test_dict['classes'] = '0'        # классы, которые будут распознаны
-    elif selected_class == 'cars':    
-        test_dict['classes'] = '2'
-    elif selected_class == 'boats':
-        test_dict['classes'] = '8'   
+    test_dict['classes'] = int(selected_class)   
 
     # вызов функции detect из класса TerraYolo)
     yolov5.run(test_dict, exp_type='test') 
@@ -151,7 +146,7 @@ def main():
 
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo, block=False))
 
-    application.add_handler(MessageHandler(filters.Document.ALL, handle_photo))
+    application.add_handler(MessageHandler(filters.Document.IMAGE, handle_photo))
 
     # запуск приложения (для остановки нужно нажать Ctrl-C)
     application.run_polling()

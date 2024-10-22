@@ -54,7 +54,12 @@ async def detection(update, context):
     test_dict['weights'] = 'yolov5x.pt'     # Самые сильные веса yolov5x.pt, вы также можете загрузить версии: yolov5n.pt, yolov5s.pt, yolov5m.pt, yolov5l.pt (в порядке возрастания)
 
     test_dict['source'] = 'images'          # папка, в которую загружаются присланные в бота изображения
+    # test_dict['conf'] = 0.01
     test_dict['conf'] = 0.5              # порог распознавания
+    # test_dict['conf'] = 0.99
+    # test_dict['iou'] = 0.01
+    test_dict['iou'] = 0.5
+    # test_dict['iou'] = 0.99
     # test_dict['classes'] = '0'        # классы, которые будут распознаны
 
 
@@ -83,7 +88,7 @@ def main():
     application.add_handler(MessageHandler(filters.PHOTO, detection, block=False))
     application.add_handler(MessageHandler(filters.TEXT, help))
 
-    application.add_handler(MessageHandler(filters.Document.ALL, detection))
+    application.add_handler(MessageHandler(filters.Document.IMAGE, detection))
 
     application.run_polling() # запускаем бота (остановка CTRL + C)
 
